@@ -1,25 +1,21 @@
-function htmlbodyHeightUpdate(){
-    var height3 = $( window ).height()
-    var height1 = $('.nav').height()+50
-    height2 = $('.main').height()
-    if(height2 > height3){
-        $('html').height(Math.max(height1,height3,height2)+10);
-        $('body').height(Math.max(height1,height3,height2)+10);
-    }
-    else
-    {
-        $('html').height(Math.max(height1,height3,height2));
-        $('body').height(Math.max(height1,height3,height2));
-    }
+$(function () {
+    $('.navbar-toggle').click(function () {
+        $('.navbar-nav').toggleClass('slide-in');
+        $('.side-body').toggleClass('body-slide-in');
+        $('#search').removeClass('in').addClass('collapse').slideUp(200);
 
-}
-$(document).ready(function () {
-    htmlbodyHeightUpdate()
-    $( window ).resize(function() {
-        htmlbodyHeightUpdate()
+        /// uncomment code for absolute positioning tweek see top comment in css
+        //$('.absolute-wrapper').toggleClass('slide-in');
+
     });
-    $( window ).scroll(function() {
-        height2 = $('.main').height()
-        htmlbodyHeightUpdate()
+
+    // Remove menu for searching
+    $('#search-trigger').click(function () {
+        $('.navbar-nav').removeClass('slide-in');
+        $('.side-body').removeClass('body-slide-in');
+
+        /// uncomment code for absolute positioning tweek see top comment in css
+        //$('.absolute-wrapper').removeClass('slide-in');
+
     });
 });

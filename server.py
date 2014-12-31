@@ -6,10 +6,24 @@ import os
 import yaml
 import tornado.web
 import tornado.ioloop
+from plugin import PluginMount, PluginProvider
+from entities import *
+
+global log
+global config
+global plugins
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("templates/index.html")
+        projects = []
+        for plugin in plugins:
+            projects += plugin.projects()
+        log.info("Projects loaded as %s" % str(projects))
+        self.render(
+            "templates/index.html",
+            config = config,
+            projects = projects
+        )
 
 application = tornado.web.Application([
     (r"/", MainHandler),
@@ -25,6 +39,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Setup logging options
+    global log
     log_level = logging.DEBUG if args.debug else logging.INFO
     log = logging.getLogger(os.path.basename(__file__))
     log.setLevel(log_level)
@@ -45,24 +60,43 @@ if __name__ == "__main__":
     log.info("Initializing...")
 
     # Load Config
-    # defaults = {
-    #     "setting": "value",
-    # }
-    # if os.path.isfile(args.config):
-    #     log.debug("Loading config file %s" % args.config)
-    #     config = yaml.load(file(args.config))
-    #     if config:
-    #         # config contains items
-    #         config = dict(defaults.items() + yaml.load(file(args.config)).items())
-    #     else:
-    #         # config is empty, just use defaults
-    #         config = defaults
-    # else:
-    #     log.debug("Config file does not exist, creating a default config...")
-    #     with open(args.config, 'w') as outfile:
-    #         outfile.write( yaml.dump(defaults, default_flow_style=False) )
-    #     config = defaults
-    # log.debug("Config loaded as:\n%s" % str(config))
+    global config
+    defaults = {
+        "trello": {
+            "key": "",
+            "secret": "",
+            "oauth_token": "",
+            "oauth_token_secret": "",
+            "lists": {
+                "working": "today",
+                "shortlist": "short list",
+                "backlog": "backlog",
+            }
+        },
+    }
+    if os.path.isfile(args.config):
+        log.debug("Loading config file %s" % args.config)
+        config = yaml.load(file(args.config))
+        if config:
+            # config contains items
+            config = dict(defaults.items() + yaml.load(file(args.config)).items())
+        else:
+            # config is empty, just use defaults
+            config = defaults
+        log.debug("Config file loaded, writing current config to file")
+    else:
+        log.debug("Config file does not exist, creating a default config...")
+        config = defaults
+
+    log.debug("Config loaded as:\n%s, saving this to disk" % str(config))
+    with open(args.config, 'w') as outfile:
+        outfile.write( yaml.dump(config, default_flow_style=False) )
+
+    log.info("Loading plugins...")
+    from plugins import *
+    global plugins
+    plugins = [p(log, config) for p in PluginProvider.plugins]
+    log.info("Plugins loaded as %s" % str(plugins))
 
     log.info("Initialization complete")
 
