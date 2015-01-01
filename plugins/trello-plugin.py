@@ -52,6 +52,7 @@ class Trello(PluginProvider):
             self.log.debug("Task list is %s" % str(tasks))
             result += [project.Project(
                 name = board.name,
+                pid = board.id,
                 source = 'trello',
                 url = board.url,
                 tasks = tasks

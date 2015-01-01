@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for project in projects %}
+        {% if pid == project.pid %}
+            {% if project.source == 'trello' %}
+                {% module Project(project, show_tasks = config['trello']['lists']['working']) %}
+            {% end %}
+        {% end %}
+    {% end %}
+{% end %}

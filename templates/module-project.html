@@ -1,0 +1,33 @@
+{% if display == 'jumbotron' %}
+    <div class="jumbotron">
+        <h1>{{ project.name }}</h1>
+        <div class="statistics">
+            <p>Total tasks: {{ len(project.tasks) }}</p>
+            <p>Tasks touched today: x</p>
+        </div>
+        <p><a class="btn btn-primary btn-lg" href="{{ project.url }}" target="_blank">
+            <i class="fa fa-{{ project.source }}"></i>
+        </a></p>
+    </div>
+{% elif display == 'panel' %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="{{ project.url }}" target="_blank">
+                {{ project.name }} <i class="fa fa-{{ project.source }}"></i>
+            </a>
+        </div>
+        <div class="panel-body">
+            body
+        </div>
+        <div class="panel-footer">
+            footer
+        </div>
+    </div>
+{% end %}
+{% if show_tasks %}
+    {% for task in project.tasks %}
+        {% if show_tasks == task.status %}
+            {% module Task(task) %}
+        {% end %}
+    {% end %}
+{% end %}

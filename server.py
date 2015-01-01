@@ -8,26 +8,56 @@ import tornado.web
 import tornado.ioloop
 from plugin import PluginMount, PluginProvider
 from entities import *
+import ui_modules
 
 global log
 global config
 global plugins
+menu_state = {
+    'projects': False,
+}
+
+def get_projects():
+    projects = []
+    for plugin in plugins:
+        projects += plugin.projects()
+    log.debug("Projects loaded as %s" % str(projects))
+    return projects
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        projects = []
-        for plugin in plugins:
-            projects += plugin.projects()
-        log.info("Projects loaded as %s" % str(projects))
+        projects = get_projects()
         self.render(
             "templates/index.html",
             config = config,
+            menu_state = menu_state,
             projects = projects
         )
 
+class ProjectHandler(tornado.web.RequestHandler):
+    def get(self, pid):
+        projects = get_projects()
+        menu_state['projects'] = True
+        self.render(
+            "templates/project.html",
+            config = config,
+            menu_state = menu_state,
+            projects = projects,
+            pid = pid
+        )
+
+settings = {
+    "static_path": os.path.join(os.path.dirname(__file__),'static'),
+    "ui_modules": {
+        'Project': ui_modules.Project,
+        'Task': ui_modules.Task,
+    },
+}
+
 application = tornado.web.Application([
     (r"/", MainHandler),
-], static_path=os.path.join(os.path.dirname(__file__),'static'))
+    (r"/project/(.*)", ProjectHandler),
+], **settings)
 
 if __name__ == "__main__":
     # Parse command line arguments
@@ -71,6 +101,7 @@ if __name__ == "__main__":
                 "working": "today",
                 "shortlist": "short list",
                 "backlog": "backlog",
+                "complete": "done",
             }
         },
     }
