@@ -17,6 +17,21 @@ menu_state = {
     'projects': False,
 }
 
+def merge(x,y):
+    # store a copy of x, but overwrite with y's values where applicable
+    merged = dict(x,**y)
+
+    xkeys = x.keys()
+
+    # if the value of merged[key] was overwritten with y[key]'s value
+    # then we need to put back any missing x[key] values
+    for key in xkeys:
+        # if this key is a dictionary, recurse
+        if isinstance(x[key],dict) and y.has_key(key):
+            merged[key] = merge(x[key],y[key])
+
+    return merged
+
 def get_projects():
     projects = []
     for plugin in plugins:
@@ -97,12 +112,17 @@ if __name__ == "__main__":
             "secret": "",
             "oauth_token": "",
             "oauth_token_secret": "",
-            "lists": {
-                "working": "today",
-                "shortlist": "short list",
+            "status": {
+                "today": "working",
+                "short list": "shortlist",
                 "backlog": "backlog",
-                "complete": "done",
-            }
+                "done": "complete",
+            },
+            "priority": {
+                "mild": "low",
+                "medium": "medium",
+                "hot": "high",
+            },
         },
     }
     if os.path.isfile(args.config):
@@ -110,11 +130,12 @@ if __name__ == "__main__":
         config = yaml.load(file(args.config))
         if config:
             # config contains items
-            config = dict(defaults.items() + yaml.load(file(args.config)).items())
+            config = merge(defaults,yaml.load(file(args.config)))
+            log.debug("Config merged with defaults")
         else:
             # config is empty, just use defaults
             config = defaults
-        log.debug("Config file loaded, writing current config to file")
+            log.debug("Config file was empty, loaded config from defaults")
     else:
         log.debug("Config file does not exist, creating a default config...")
         config = defaults
