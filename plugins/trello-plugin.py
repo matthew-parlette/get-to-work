@@ -39,14 +39,33 @@ class Trello(PluginProvider):
             for card in board.open_cards():
                 for board_list in lists:
                     if board_list.id == card.list_id:
-                        status = board_list.name
-                        self.log.debug("Status for '%s' read as %s" % (str(card.name),str(status)))
+                        if board_list.name in self.config['trello']['status']:
+                            status = self.config['trello']['status'][board_list.name]
+                            self.log.debug("Status for '%s' read as %s" % (str(card.name),str(status)))
+                        else:
+                            self.log.error(
+                                "Status for '%s' could not be determined, list name of %s not found in config" % (
+                                    str(card.name),
+                                    str(board_list.name),
+                                ))
                         break
+
+                # Determine priority
+                priority = None
+                if card.labels:
+                    for label in card.labels:
+                        if label['name'] in self.config['trello']['priority']:
+                            # Return the first label we find that matches a priority
+                            #  from the config.
+                            priority = self.config['trello']['priority'][label['name']]
+                            break
+
                 tasks += [task.Task(
                     name = card.name,
                     source = 'trello',
                     url = card.url,
                     status = status or None,
+                    priority = priority,
                 )]
                 self.log.debug("Task created for card '%s'" % str(card.name))
             self.log.debug("Task list is %s" % str(tasks))

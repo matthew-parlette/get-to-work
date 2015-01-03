@@ -1,4 +1,14 @@
-<div class="panel panel-info">
+{% set panel_color = 'default' %}
+{% if task.priority %}
+    {% if task.priority == 'low' %}
+        {% set panel_color = 'success' %}
+    {% elif task.priority == 'medium' %}
+        {% set panel_color = 'warning' %}
+    {% elif task.priority == 'high' %}
+        {% set panel_color = 'danger' %}
+    {% end %}
+{% end %}
+<div class="panel panel-{{ panel_color }}">
     <div class="panel-heading">
         <a href="{{ task.url }}" target="_blank">
             {{ task.name }}

@@ -90,7 +90,7 @@
                                                 <!-- <a href="{{ project.url }}" target="_blank" > -->
                                                     <i class="fa fa-{{ project.source }}"></i>
                                                 <!-- </a> -->
-                                            {% set working_tasks = len([t for t in project.tasks if t.status == config['trello']['lists']['working']]) %}
+                                            {% set working_tasks = len([t for t in project.tasks if t.status == 'working']) %}
                                             <span class="label label-{% if working_tasks > 5 %}danger{% elif working_tasks > 2 %}warning{% else %}success{% end %} pull-right">
                                                 {{ working_tasks }}
                                             </span>
