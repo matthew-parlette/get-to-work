@@ -13,18 +13,32 @@
         <a href="{{ task.url }}" target="_blank">
             {{ task.name }}
         </a>
+        <a href="#"
+            id="close-{{ task.id }}"
+            data-url="/task/{{ task.id }}?action=close"
+            data-target="close-{{ task.id }}"
+            data-cache="false"
+            data-async="true"
+            class="btn btn-xs btn-default pull-right">
+            <span class="glyphicon glyphicon-ok"></span> Done
+        </a>
     </div>
     <div class="panel-body">
         {% if task.comments %}
+            Comments:
             <ul class="list-group">
             {% for comment in task.comments %}
                 <li class="list-group-item">{{ comment.name }}</li>
             {% end %}
             </ul>
+        {% else %}
+            Comments: None
         {% end %}
     </div>
     <div class="panel-footer">
-        footer
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" name="comment" placeholder="add comment">
+        </div>
     </div>
 </div>
 

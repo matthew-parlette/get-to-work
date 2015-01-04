@@ -64,6 +64,30 @@ class ProjectHandler(tornado.web.RequestHandler):
             pid = pid
         )
 
+class TaskHandler(tornado.web.RequestHandler):
+    def post(self, tid):
+        log.info("Received %s as POST" % str(self.request))
+        projects = get_projects()
+        action = self.get_argument('action', default = None)
+        if action and action == 'close':
+            self.set_status(404) # Status: Not Found
+            # Find the task to close
+            for project in projects:
+                for task in project.tasks:
+                    if task.id == tid:
+                        log.debug("Found task to close, %s" % str(task))
+                        task.plugin.complete(task = task)
+                        self.set_status(200) # Status: OK
+                        self.write("%s%s%s%s" % (
+                            '<a href="#" ',
+                            'class="btn btn-xs btn-success pull-right">',
+                            '<span class="glyphicon glyphicon-ok"></span> Done',
+                            '</a>',
+                        ))
+                        return
+                        # break # Don't need to process any more tasks
+                # break # Don't need to process any more projects
+
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__),'static'),
     "ui_modules": {
@@ -76,6 +100,7 @@ settings = {
 application = tornado.web.Application([
     (r"/", MainHandler),
     (r"/project/(.*)", ProjectHandler),
+    (r"/task/(.*)", TaskHandler),
 ], **settings)
 
 if __name__ == "__main__":

@@ -4,6 +4,9 @@ from entities import *
 from datetime import datetime
 import timeit
 
+# Reference for py-trello 1.6:
+# https://github.com/sarumont/py-trello/blob/c12b65d238970dad0258c54e5d840bfb1d293cee/trello/__init__.py
+
 class Trello(PluginProvider):
     """docstring for Trello"""
     def __init__(self, log, config):
@@ -66,6 +69,7 @@ class Trello(PluginProvider):
 
                 tasks += [task.Task(
                     name = card.name,
+                    id = card.id,
                     plugin = self,
                     plugin_obj = card,
                     url = card.url,
@@ -117,3 +121,27 @@ class Trello(PluginProvider):
             self.log.info("Comments loaded in %s" % str(timeit.default_timer() - start))
             return comments
         return None
+
+    def complete(self, task = None):
+        if task and task.plugin is self and task.plugin_obj:
+            self.log.debug("Marking task %s as complete..." % str(task))
+            card = task.plugin_obj
+
+            # Find the list for completed tasks
+            start = timeit.default_timer()
+            complete_list_obj = None
+            board = card.trello_list # Apparently this is a reference to the board
+                                     # Likely since in projects() we did board.open_cards()
+            lists = board.open_lists()
+            for board_list in lists:
+                if self.config['trello']['status'][board_list.name] == 'complete':
+                    self.log.debug("Found list %s is the list for completed tasks" % str(board_list.name))
+                    complete_list_obj = board_list
+                    break
+            # Move the card to the completed list
+            self.log.debug("Moving card %s to list %s" % (str(card),str(complete_list_obj.name)))
+            card.change_list(complete_list_obj.id)
+            self.log.info("Task %s marked as complete in %s" % (
+                str(task),
+                str(timeit.default_timer() - start),
+            ))

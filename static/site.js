@@ -18,4 +18,23 @@ $(function () {
         //$('.absolute-wrapper').removeClass('slide-in');
 
     });
+
+    $('a[data-async="true"]').click(function(e){
+        e.preventDefault();
+        var self = $(this),
+        url = self.data('url'),
+        target = self.data('target'),
+        cache = self.data('cache');
+
+        $.ajax({
+            url: url,
+            cache : cache,
+            method: 'POST',
+            success: function(data){
+                if (target !== 'undefined'){
+                    $('#'+target).html( data );
+                }
+            }
+        });
+    });
 });
