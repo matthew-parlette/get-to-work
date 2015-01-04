@@ -9,6 +9,7 @@ import tornado.ioloop
 from plugin import PluginMount, PluginProvider
 from entities import *
 import ui_modules
+import timeit
 
 global log
 global config
@@ -34,9 +35,11 @@ def merge(x,y):
 
 def get_projects():
     projects = []
+    start = timeit.default_timer()
     for plugin in plugins:
         projects += plugin.projects()
     log.debug("Projects loaded as %s" % str(projects))
+    log.info("Projects loaded in %s" % str(timeit.default_timer() - start))
     return projects
 
 class MainHandler(tornado.web.RequestHandler):
@@ -66,6 +69,7 @@ settings = {
     "ui_modules": {
         'Project': ui_modules.Project,
         'Task': ui_modules.Task,
+        'Comment': ui_modules.Comment,
     },
 }
 

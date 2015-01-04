@@ -6,14 +6,14 @@
             <p>Tasks touched today: x</p>
         </div>
         <p><a class="btn btn-primary btn-lg" href="{{ project.url }}" target="_blank">
-            <i class="fa fa-{{ project.source }}"></i>
+            <i class="fa fa-{{ project.plugin.name }}"></i>
         </a></p>
     </div>
 {% elif display == 'panel' %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <a href="{{ project.url }}" target="_blank">
-                {{ project.name }} <i class="fa fa-{{ project.source }}"></i>
+                {{ project.name }} <i class="fa fa-{{ project.plugin.name }}"></i>
             </a>
         </div>
         <div class="panel-body">

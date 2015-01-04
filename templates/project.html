@@ -3,7 +3,7 @@
 {% block content %}
     {% for project in projects %}
         {% if pid == project.pid %}
-            {% if project.source == 'trello' %}
+            {% if project.plugin.name == 'trello' %}
                 {% module Project(project, show_tasks = 'working') %}
             {% end %}
         {% end %}

@@ -1,11 +1,14 @@
 from plugin import PluginProvider
 from trello import TrelloClient, util
 from entities import *
+from datetime import datetime
+import timeit
 
 class Trello(PluginProvider):
     """docstring for Trello"""
     def __init__(self, log, config):
         super(Trello, self).__init__(log, config)
+        self.name = 'trello' # Friendly name for this plugin source
         self.log.info("Initializing Trello client...")
 
         # Gather the oauth tokens if they weren't provided
@@ -37,6 +40,7 @@ class Trello(PluginProvider):
             lists = board.open_lists()
             tasks = []
             for card in board.open_cards():
+                self.log.debug("Card %s has badges %s" % (str(card.name),str(card.badges)))
                 for board_list in lists:
                     if board_list.id == card.list_id:
                         if board_list.name in self.config['trello']['status']:
@@ -62,7 +66,8 @@ class Trello(PluginProvider):
 
                 tasks += [task.Task(
                     name = card.name,
-                    source = 'trello',
+                    plugin = self,
+                    plugin_obj = card,
                     url = card.url,
                     status = status or None,
                     priority = priority,
@@ -72,9 +77,43 @@ class Trello(PluginProvider):
             result += [project.Project(
                 name = board.name,
                 pid = board.id,
-                source = 'trello',
+                plugin = self,
                 url = board.url,
                 tasks = tasks
             )]
         self.log.debug("Boards loaded, returning %s" % str(result))
         return result
+
+    def comments(self, task = None):
+        """Get the comments for a task."""
+        if task:
+            card = task.plugin_obj
+            comments = []
+            start = timeit.default_timer()
+            # card.fetch() # This isn't working with py-trello 1.6 since there is no due date
+            self.log.debug("Fetching comments for %s..." % str(card))
+            json_obj = card.client.fetch_json(
+                           '/cards/' + card.id,
+                           query_params={'badges': False}
+                       )
+            if json_obj['badges']['comments'] > 0:
+                card.comments = card.client.fetch_json(
+                                    '/cards/' + card.id + '/actions',
+                                    query_params={'filter': 'commentCard'}
+                                )
+
+                self.log.debug("Loading comments for %s..." % str(card))
+                for c in card.comments:
+                    comments += [comment.Comment(
+                        name = c['data']['text'],
+                        plugin = self,
+                        url = None,
+                        timestamp = datetime.strptime(
+                            c['date'][:-5],
+                            '%Y-%m-%dT%H:%M:%S',
+                        ),
+                    )]
+            self.log.debug("Comments loaded as %s" % str(comments))
+            self.log.info("Comments loaded in %s" % str(timeit.default_timer() - start))
+            return comments
+        return None

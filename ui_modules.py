@@ -27,3 +27,15 @@ class Task(tornado.web.UIModule):
             config = config,
             task = task,
         )
+
+class Comment(tornado.web.UIModule):
+    def render(
+        self,
+        comment,
+        config = None
+    ):
+        return self.render_string(
+            "templates/module-comment.html",
+            config = config,
+            comment = comment,
+        )
