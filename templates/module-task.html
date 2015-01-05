@@ -28,7 +28,12 @@
             Comments:
             <ul class="list-group">
             {% for comment in task.comments %}
-                <li class="list-group-item">{{ comment.name }}</li>
+                <li class="list-group-item">
+                    {% if comment.most_recent %}
+                        <div class="pull-right"><span class="badge">Most Recent</span></div>
+                    {% end %}
+                    {{ comment.name }}
+                </li>
             {% end %}
             </ul>
         {% else %}

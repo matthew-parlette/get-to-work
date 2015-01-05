@@ -107,6 +107,7 @@ class Trello(PluginProvider):
                                 )
 
                 self.log.debug("Loading comments for %s..." % str(card))
+                most_recent = True # I think the first comment is always most recent
                 for c in card.comments:
                     comments += [comment.Comment(
                         name = c['data']['text'],
@@ -116,7 +117,9 @@ class Trello(PluginProvider):
                             c['date'][:-5],
                             '%Y-%m-%dT%H:%M:%S',
                         ),
+                        most_recent = most_recent
                     )]
+                    most_recent = False
             self.log.debug("Comments loaded as %s" % str(comments))
             self.log.info("Comments loaded in %s" % str(timeit.default_timer() - start))
             return comments
