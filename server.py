@@ -90,6 +90,7 @@ class TaskHandler(tornado.web.RequestHandler):
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__),'static'),
+    "favicon_path": os.path.join(os.path.dirname(__file__),'static','favicon.ico'),
     "ui_modules": {
         'Project': ui_modules.Project,
         'Task': ui_modules.Task,
