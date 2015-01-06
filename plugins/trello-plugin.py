@@ -12,6 +12,7 @@ class Trello(PluginProvider):
     def __init__(self, log, config):
         super(Trello, self).__init__(log, config)
         self.name = 'trello' # Friendly name for this plugin source
+        self.icon = 'trello'
         self.log.info("Initializing Trello client...")
 
         # Gather the oauth tokens if they weren't provided

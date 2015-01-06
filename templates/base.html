@@ -94,7 +94,7 @@
                                             <a href="{{ '/project/' + url_escape(project.pid) }}">
                                             {{ project.name }}
                                                 <!-- <a href="{{ project.url }}" target="_blank" > -->
-                                                    <i class="fa fa-{{ project.plugin.name }}"></i>
+                                                    <i class="fa fa-{{ project.plugin.icon }}"></i>
                                                 <!-- </a> -->
                                             {% set working_tasks = len([t for t in project.tasks if t.status == 'working']) %}
                                             <span class="label label-{% if working_tasks > 5 %}danger{% elif working_tasks > 2 %}warning{% else %}success{% end %} pull-right">
