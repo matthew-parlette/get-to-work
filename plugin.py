@@ -29,7 +29,33 @@ class PluginProvider:
         log.info("Registering %s as a PluginProvider" % str(self.__class__.__name__))
         self.log = log
         self.config = config
+        self.name = "plugin" # Friendly name to reference this plugin
+        self.icon = "plug" # Icon to use for items from this plugin.
+
+    def projects(self, filter = {}):
+        """Return a list of projects from this plugin."""
+        return []
+
+    def tasks(self, project = None):
+        """Return a list of tasks.
+
+        If project is provided, return tasks for a single Project"""
+        return []
+
+    def comments(self, task = None):
+        """Return a list of Comment objects.
+
+        If task is provided, return comments for a single Task."""
+        return []
+
+    def complete(self, task = None):
+        """Mark a given Task as complete."""
+        return False
+
+    def add_comment(self, task, text):
+        """Add a Comment to a given Task."""
+        return False
 
     def report(self,date):
         """Return a string for the report with the filters provided."""
-        pass
+        return None
