@@ -148,3 +148,13 @@ class Trello(PluginProvider):
                 str(task),
                 str(timeit.default_timer() - start),
             ))
+
+    def add_comment(self, task, text):
+        if task.plugin is self and task.plugin_obj:
+            self.log.info("Adding comment to %s..." % str(task))
+            start = timeit.default_timer()
+            task.plugin_obj.comment(text)
+            self.log.info("Comment %s added in %s" % (
+                str(text)[20:],
+                str(timeit.default_timer() - start),
+            ))

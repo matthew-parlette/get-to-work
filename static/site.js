@@ -19,6 +19,7 @@ $(function () {
 
     });
 
+    // For links with data-async, send these requests via AJAX
     $('a[data-async="true"]').click(function(e){
         e.preventDefault();
         var self = $(this),
@@ -29,12 +30,38 @@ $(function () {
         $.ajax({
             url: url,
             cache : cache,
-            method: 'POST',
+            type: 'POST',
             success: function(data){
                 if (target !== 'undefined'){
-                    $('#'+target).html( data );
+                    // alert(data);
+                    $('#'+target).replaceWith( data );
                 }
             }
         });
+    });
+
+    // Send comments via AJAX when enter is pressed
+    $('input[data-async="true"]').keydown(function(e){
+        if(e.keyCode == 13){
+            e.preventDefault();
+            var self = $(this),
+            url = self.data('url'),
+            target = self.data('target'),
+            cache = self.data('cache')
+            key = self.data('key');
+
+            $.ajax({
+                url: url,
+                cache : cache,
+                data: '{"' + key + '": "' + $(this).val() + '"}',
+                type: 'POST',
+                success: function(data){
+                    if (target !== 'undefined'){
+                        // alert(data);
+                        $('#'+target).replaceWith( data );
+                    }
+                }
+            });
+        }
     });
 });
