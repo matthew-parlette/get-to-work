@@ -75,8 +75,8 @@
 
                         <!-- Tasks -->
                         <li>
-                            <a href="/tasks"><span class="fa fa-edit"></span> Tasks
-                            <span class="pull-right label label-default">0</span></a>
+                            <a href="/task"><span class="fa fa-edit"></span> Tasks
+                            <span class="pull-right label label-default">{% if tasks %}{{ len(tasks) }}{% else %}-{% end %}</span></a>
                         </li>
 
                         <!-- Projects -->
@@ -89,18 +89,20 @@
                             <div id="projects-1" class="panel-collapse collapse {% if menu_state['projects'] %}in{% end %}">
                                 <div class="panel-body">
                                     <ul class="nav navbar-nav">
-                                        {% for project in projects %}
-                                        <li {% if str(handler.__class__.__name__) == 'ProjectHandler' and pid == project.pid %}class="active"{% end %}>
-                                            <a href="{{ '/project/' + url_escape(project.pid) }}">
-                                            {{ project.name }}
-                                                <!-- <a href="{{ project.url }}" target="_blank" > -->
-                                                    <i class="fa fa-{{ project.plugin.icon }}"></i>
-                                                <!-- </a> -->
-                                            {% set working_tasks = len([t for t in project.tasks if t.status == 'working']) %}
-                                            <span class="label label-{% if working_tasks > 5 %}danger{% elif working_tasks > 2 %}warning{% else %}success{% end %} pull-right">
-                                                {{ working_tasks }}
-                                            </span>
-                                        </a></li>
+                                        {% if projects %}
+                                            {% for project in projects %}
+                                            <li {% if str(handler.__class__.__name__) == 'ProjectHandler' and pid == project.pid %}class="active"{% end %}>
+                                                <a href="{{ '/project/' + url_escape(project.pid) }}">
+                                                {{ project.name }}
+                                                    <!-- <a href="{{ project.url }}" target="_blank" > -->
+                                                        <i class="fa fa-{{ project.plugin.icon }}"></i>
+                                                    <!-- </a> -->
+                                                {% set working_tasks = len([t for t in project.tasks if t.status == 'working']) %}
+                                                <span class="label label-{% if working_tasks > 5 %}danger{% elif working_tasks > 2 %}warning{% else %}success{% end %} pull-right">
+                                                    {{ working_tasks }}
+                                                </span>
+                                            </a></li>
+                                            {% end %}
                                         {% end %}
                                     </ul>
                                 </div>

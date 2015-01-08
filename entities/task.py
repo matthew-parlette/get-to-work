@@ -9,16 +9,20 @@ class Task(object):
         status = None,
         priority = None,
         comments = [],
+        commentable = True,
+        closeable = True,
     ):
         super(Task, self).__init__()
-        self.name = name             # Task name
-        self.id = id                 # ID associated with task from plugin
-        self.plugin = plugin         # The plugin that created this task
-        self.plugin_obj = plugin_obj # Reference to the object that created this task
-        self.url = url               # Link to the item
-        self.status = status         # Status of this task
-        self.priority = priority     # Priority of this task (low, medium, high)
-        self._comments = comments    # Comments for this task
+        self.name = name               # Task name
+        self.id = id                   # ID associated with task from plugin
+        self.plugin = plugin           # The plugin that created this task
+        self.plugin_obj = plugin_obj   # Reference to the object that created this task
+        self.url = url                 # Link to the item
+        self.status = status           # Status of this task
+        self.priority = priority       # Priority of this task (low, medium, high)
+        self._comments = comments      # Comments for this task
+        self.commentable = commentable # Can a comment be added through this site?
+        self.closeable = closeable     # Can this task be closed through this site?
 
     def __repr__(self):
         return "%s (%s, %s)" % (

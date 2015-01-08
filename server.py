@@ -15,6 +15,16 @@ import timeit
 global log
 global config
 global plugins
+cache = {
+    'projects': {
+        'items': [],
+        'expires': None,
+    },
+    'tasks': {
+        'items': [],
+        'expires': None,
+    },
+}
 menu_state = {
     'projects': False,
 }
@@ -34,14 +44,46 @@ def merge(x,y):
 
     return merged
 
-def get_projects():
-    projects = []
+def refresh_cache():
+    global cache
+    # Update everything for now
+
+    # Refresh projects
     start = timeit.default_timer()
+    projects = []
     for plugin in plugins:
         projects += plugin.projects()
     log.debug("Projects loaded as %s" % str(projects))
     log.info("Projects loaded in %s" % str(timeit.default_timer() - start))
-    return projects
+    cache['projects'] = {
+        'items': projects,
+        'expires': None,
+    }
+
+    # Refresh tasks
+    start = timeit.default_timer()
+    tasks = []
+    for plugin in plugins:
+        tasks += plugin.tasks()
+    log.debug("Tasks loaded as %s" % str(tasks))
+    log.info("Tasks loaded in %s" % str(timeit.default_timer() - start))
+    cache['tasks'] = {
+        'items': tasks,
+        'expires': None,
+    }
+
+    # Return cache
+    return cache
+
+def get_projects():
+    """Deprecated, use refresh_cache() instead"""
+    refresh_cache()
+    return cache['projects']['items']
+
+def get_tasks():
+    """Deprecated, use refresh_cache() instead"""
+    refresh_cache()
+    return cache['tasks']['items']
 
 def find_task(tid):
     log.info("Looking for task %s" % str(tid))
@@ -61,7 +103,8 @@ class MainHandler(tornado.web.RequestHandler):
             "templates/index.html",
             config = config,
             menu_state = menu_state,
-            projects = projects
+            projects = cache['projects']['items'],
+            tasks = cache['tasks']['items'],
         )
 
 class ProjectHandler(tornado.web.RequestHandler):
@@ -72,44 +115,34 @@ class ProjectHandler(tornado.web.RequestHandler):
             "templates/project.html",
             config = config,
             menu_state = menu_state,
-            projects = projects,
-            pid = pid
+            projects = cache['projects']['items'],
+            tasks = cache['tasks']['items'],
+            pid = pid,
         )
 
-class TaskHandler(tornado.web.RequestHandler):
-    def post(self, tid):
-        log.info("Received %s as POST" % str(self.request))
-        projects = get_projects()
-        action = self.get_argument('action', default = None)
-        if action and action == 'close':
-            self.set_status(404) # Status: Not Found
-            # Find the task to close
-            for project in projects:
-                for task in project.tasks:
-                    if task.id == tid:
-                        log.debug("Found task to close, %s" % str(task))
-                        task.plugin.complete(task = task)
-                        self.set_status(200) # Status: OK
-                        self.write("%s%s%s%s" % (
-                            '<a href="#" ',
-                            'class="btn btn-xs btn-success pull-right">',
-                            '<span class="glyphicon glyphicon-ok"></span> Done',
-                            '</a>',
-                        ))
-                        return
-                        # break # Don't need to process any more tasks
-                # break # Don't need to process any more projects
-
 class TaskHandlerWithAction(tornado.web.RequestHandler):
-    def get(self, tid, action = None):
+    def get(self, tid = None, action = None):
         log.info("Received %s as GET" % (str(self.request)))
-        task = find_task(tid)
-        if task:
-            self.render(
-                "templates/components/task.html",
-                config = config,
-                task = task,
-            )
+        if tid:
+            task = find_task(tid)
+            if task:
+                self.render(
+                    "templates/components/task.html",
+                    config = config,
+                    task = task,
+                )
+        else:
+            # Show all tasks
+            tasks = get_tasks()
+            projects = get_projects()
+            if tasks:
+                self.render(
+                    "templates/task.html",
+                    config = config,
+                    menu_state = menu_state,
+                    projects = cache['projects']['items'],
+                    tasks = cache['tasks']['items'],
+                )
 
     def post(self, tid, action = None):
         log.debug("Received %s as POST" % (str(self.request)))
@@ -156,6 +189,7 @@ application = tornado.web.Application([
     (r"/project/(.*)", ProjectHandler),
     (r"/task/(.*)/(comment|close)", TaskHandlerWithAction),
     (r"/task/(.*)$", TaskHandlerWithAction),
+    (r"/task", TaskHandlerWithAction),
 ], **settings)
 
 if __name__ == "__main__":
@@ -206,6 +240,24 @@ if __name__ == "__main__":
                 "mild": "low",
                 "medium": "medium",
                 "hot": "high",
+            },
+        },
+        "zendesk": {
+            "url": "",
+            "email": "",
+            "password": "",
+            "view": "", # view id to use when listing tickets
+            "status": {
+                "Open": "working",
+                "Pending": "shortlist",
+                "On-hold": "backlog",
+                "Solved": "complete",
+            },
+            "priority": {
+                "Low": "low",
+                "Normal": "medium",
+                "High": "high",
+                "Urgent": "high",
             },
         },
     }

@@ -89,6 +89,15 @@ class Trello(PluginProvider):
         self.log.debug("Boards loaded, returning %s" % str(result))
         return result
 
+    def tasks(self, project = None):
+        result = []
+        if project:
+            pass
+        else:
+            # Return all tasks
+            pass
+        return result
+
     def comments(self, task = None):
         """Get the comments for a task."""
         if task:

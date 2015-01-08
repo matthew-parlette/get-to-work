@@ -13,15 +13,17 @@
         <a href="{{ task.url }}" target="_blank">
             {{ task.name }}
         </a>
-        <a href="#"
-            id="close-{{ task.id }}"
-            data-url="/task/{{ task.id }}/close"
-            data-target="{{ task.id }}"
-            data-cache="false"
-            data-async="true"
-            class="btn btn-xs btn-{% if task.status != 'complete'%}default{% else %}success{% end %} pull-right">
-            <span class="glyphicon glyphicon-ok"></span> Done
-        </a>
+        {% if task.closeable %}
+            <a href="#"
+                id="close-{{ task.id }}"
+                data-url="/task/{{ task.id }}/close"
+                data-target="{{ task.id }}"
+                data-cache="false"
+                data-async="true"
+                class="btn btn-xs btn-{% if task.status != 'complete'%}default{% else %}success{% end %} pull-right">
+                <span class="glyphicon glyphicon-ok"></span> Done
+            </a>
+        {% end %}
     </div>
     <div class="panel-body">
         {% if task.comments %}
@@ -41,17 +43,19 @@
         {% end %}
     </div>
     <div class="panel-footer">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">Comment</span>
-            <input type="text"
-                   class="form-control"
-                   name="comment"
-                   placeholder="add simple, one line comment"
-                   data-url="/task/{{ task.id }}/comment"
-                   data-cache="false"
-                   data-async="true"
-                   data-key="comment"
-                   data-target="{{ task.id }}">
-        </div>
+        {% if task.commentable %}
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">Comment</span>
+                <input type="text"
+                       class="form-control"
+                       name="comment"
+                       placeholder="add simple, one line comment"
+                       data-url="/task/{{ task.id }}/comment"
+                       data-cache="false"
+                       data-async="true"
+                       data-key="comment"
+                       data-target="{{ task.id }}">
+            </div>
+        {% end %}
     </div>
 </div>
