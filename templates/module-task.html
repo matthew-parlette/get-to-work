@@ -28,16 +28,21 @@
     <div class="panel-body">
         {% if task.comments %}
             Comments:
-            <ul class="list-group">
+            <div class="timeline-centered">
             {% for comment in task.comments %}
-                <li class="list-group-item">
-                    {% if comment.most_recent %}
-                        <div class="pull-right"><span class="badge">Most Recent</span></div>
-                    {% end %}
-                    {{ comment.name }}
-                </li>
+                <article class="timeline-entry">
+                    <div class="timeline-entry-inner">
+                        <div class="timeline-icon {% if comment.most_recent %}bg-success{% else %}bg-info{% end %}">
+                            <i class="fa fa-comment fa-2x"></i>
+                        </div>
+
+                        <div class="timeline-label">
+                            <p>{{ comment.name }}</p>
+                        </div>
+                    </div>
+                </article>
             {% end %}
-            </ul>
+        </div>
         {% else %}
             Comments: None
         {% end %}
