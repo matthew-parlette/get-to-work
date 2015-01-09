@@ -8,22 +8,39 @@
         {% set panel_color = 'danger' %}
     {% end %}
 {% end %}
-<div id="{{ task.id }}" class="panel panel-{{ panel_color }}">
+<div id="{{ task.id }}" class="panel panel-google-plus">
+    <div class="dropdown">
+        <span class="dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="[ glyphicon glyphicon-chevron-down ]"></span>
+        </span>
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+            {% if task.closeable %}
+                <li role="presentation">
+                    <a href="#"
+                       role="menuitem"
+                       id="close-{{ task.id }}"
+                       data-url="/task/{{ task.id }}/close"
+                       data-target="{{ task.id }}"
+                       data-cache="false"
+                       data-async="true">
+                        <span class="glyphicon glyphicon-ok"></span> Mark Complete
+                    </a>
+                </li>
+            {% end %}
+            <!--<li role="presentation" class="divider"></li>-->
+        </ul>
+    </div>
+    <div class="panel-google-plus-tags">
+        <ul>
+            <li>{{ task.plugin.name }}</li>
+        </ul>
+    </div>
     <div class="panel-heading">
-        <a href="{{ task.url }}" target="_blank">
-            {{ task.name }}
-        </a>
-        {% if task.closeable %}
-            <a href="#"
-                id="close-{{ task.id }}"
-                data-url="/task/{{ task.id }}/close"
-                data-target="{{ task.id }}"
-                data-cache="false"
-                data-async="true"
-                class="btn btn-xs btn-{% if task.status != 'complete'%}default{% else %}success{% end %} pull-right">
-                <span class="glyphicon glyphicon-ok"></span> Done
-            </a>
-        {% end %}
+        <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
+        <!-- <i class="fa fa-{{ task.plugin.icon }} fa-2x img-circle pull-left"></i> -->
+        <h3>{{ task.name }}</h3>
+        <h5>Subheading</h5>
     </div>
     <div class="panel-body">
         {% if task.comments %}
@@ -48,19 +65,35 @@
         {% end %}
     </div>
     <div class="panel-footer">
+        <a href="{{ task.url }}" target="_blank" class="[ btn btn-default ] fa fa-link"></a>
+        <button type="button" class="[ btn btn-default ]">
+            <span class="[ glyphicon glyphicon-share-alt ]"></span>
+        </button>
         {% if task.commentable %}
-            <div class="input-group input-group-sm">
-                <span class="input-group-addon">Comment</span>
-                <input type="text"
-                       class="form-control"
-                       name="comment"
-                       placeholder="add simple, one line comment"
-                       data-url="/task/{{ task.id }}/comment"
-                       data-cache="false"
-                       data-async="true"
-                       data-key="comment"
-                       data-target="{{ task.id }}">
-            </div>
+            <div class="input-placeholder">Add a comment...</div>
         {% end %}
     </div>
+    {% if task.commentable %}
+        <div class="panel-google-plus-comment">
+            <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
+            <div class="panel-google-plus-textarea">
+                <textarea rows="4"></textarea>
+                <button type="submit" class="[ btn btn-success disabled ]">Post comment</button>
+                <button type="reset" class="[ btn btn-default ]">Cancel</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!-- <div class="input-group input-group-sm">
+            <span class="input-group-addon">Comment</span>
+            <input type="text"
+                   class="form-control"
+                   name="comment"
+                   placeholder="add simple, one line comment"
+                   data-url="/task/{{ task.id }}/comment"
+                   data-cache="false"
+                   data-async="true"
+                   data-key="comment"
+                   data-target="{{ task.id }}">
+        </div> -->
+    {% end %}
 </div>
