@@ -31,7 +31,7 @@ border-right: 1px solid #e7e7e7;
 
 .side-menu {
     position: fixed;
-    width: 300px;
+    width: 250px;
     height: 100%;
     background-color: #f8f8f8;
     border-right: 1px solid #e7e7e7;
@@ -157,7 +157,7 @@ border-right: 1px solid #e7e7e7;
 }
 /* Main body section */
 .side-body {
-    margin-left: 310px;
+    margin-left: 260px;
     margin-right: 20px;
     margin-top: 1em;
 }
@@ -686,7 +686,7 @@ img {
 }
 .panel-google-plus > .panel-google-plus-tags {
     position: absolute;
-    top: 35px;
+    top: 65px;
     right: -3px;
 }
 .panel-google-plus > .panel-google-plus-tags > ul {

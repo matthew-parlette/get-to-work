@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
-    {% for task in tasks %}
-        <div class="row">
-            <div class="[ col-xs-12 col-sm-offset-1 col-sm-5 ]">
+    <div class="row">
+        {% for num, task in enumerate(tasks) %}
+            <div class="[ col-xs-12 col-sm-6 ]">
                 {% module Task(task) %}
             </div>
-        </div>
+        {% end %}
     </div>
-    {% end %}
 {% end %}
