@@ -37,10 +37,10 @@
         </ul>
     </div>
     <div class="panel-heading">
-        <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
-        <!-- <i class="fa fa-{{ task.plugin.icon }} fa-2x img-circle pull-left"></i> -->
-        <h3>{{ task.name }}</h3>
-        <h5>Subheading</h5>
+        <!-- <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" /> -->
+        <i class="fa fa-{{ task.plugin.icon }} circle pull-left"></i>
+        <h3><a href="{{ task.url }}" target="_blank">{{ task.name }}</a></h3>
+        <h5></h5>
     </div>
     <div class="panel-body">
         {% if task.comments %}

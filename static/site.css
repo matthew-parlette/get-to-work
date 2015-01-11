@@ -742,9 +742,9 @@ img {
     margin-top: 20px;
     padding-bottom: 5px;
 }
-.panel-google-plus > .panel-heading > img {
+/*.panel-google-plus > .panel-heading > i {
     margin-right: 15px;
-}
+}*/
 .panel-google-plus > .panel-heading > h3 {
     margin: 0px;
     font-size: 14px;
@@ -842,4 +842,50 @@ float: left;
 .panel-google-plus .btn-default:active {
     background-color: rgb(255, 255, 255);
     border-color: rgb(0, 0, 0);
+}
+
+.panel-google-plus > .panel-heading > .circle {
+    border-radius: 50%;
+    margin: 0.15em;
+    font-size: 3em;
+}
+
+.panel-google-plus > .panel-heading > .fa-trello{
+    background: #4099FF;
+    color: #fff;
+    padding: 0.1em 0.14em;
+}
+
+.panel-google-plus > .panel-heading > .fa-ticket{
+    background: #000;
+    color: #fff;
+}
+
+/* Font Awesome colors */
+/* copied from http://codepen.io/jcasabona/pen/CDvAt */
+.fa-twitter{
+    background: #4099FF;
+    color: #FFFFFF;
+    padding: 0.05em 0.07em;
+}
+.fa-google-plus{
+    color: #FFFFFF;
+    background: #dd4b39;
+    padding: 0.1em 0.1em;
+}
+
+.fa-pinterest{
+    color: #cb2027;
+}
+
+.fa-facebook{
+    background: #3B5998;
+    color: #FFFFFF;
+    padding: 0.05em 0.3em;
+}
+.fa-youtube{
+    background: #bb0000;
+    color: #FFFFFF;
+    padding: 0.1em 0.14em;
+
 }
