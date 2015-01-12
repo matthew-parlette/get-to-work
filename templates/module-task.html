@@ -43,75 +43,63 @@
         <h5></h5>
     </div>
     <div class="panel-body">
-        {% if task.comments %}
-            Comments:
-            <div class="timeline-centered">
-            {% for comment in task.comments %}
-                <article class="timeline-entry">
-                    <div class="timeline-entry-inner">
-                        <div class="timeline-icon {% if comment.most_recent %}bg-success{% else %}bg-info{% end %}">
-                            <i class="fa fa-comment fa-2x"></i>
-                        </div>
 
-                        <div class="timeline-label">
-                            <p>{{ comment.name }}</p>
-                        </div>
-                    </div>
-                </article>
-            {% end %}
-        </div>
-        {% else %}
-            Comments: None
-        {% end %}
     </div>
     <div class="panel-footer">
-        <a href="{{ task.url }}" target="_blank" class="[ btn btn-default ] fa fa-link"></a>
-        <button type="button" class="[ btn btn-default ]">
-            <span class="[ glyphicon glyphicon-share-alt ]"></span>
-        </button>
         {% if task.commentable %}
-            <div class="input-placeholder">Add a comment...</div>
+        {% end %}
+
+        <div class="buttons">
+            <a href="{{ task.url }}" target="_blank" class="[ btn btn-default ] fa fa-link"></a>
+            <button type="button" class="[ btn btn-default ]">
+                <span class="[ glyphicon glyphicon-share-alt ]"></span>
+            </button>
+        </div>
+
+        <!-- Show existing comments -->
+        {% if task.comments or task.commentable %}
+            <div class="well comment-block">
+                {% if task.comments %}
+
+                    <ul class="list-unstyled">
+                        {% for num, comment in enumerate(task.comments) %}
+                            {% module Comment(comment = comment) %}
+                            {% if num < len(task.comments) - 1 %}
+                                <hr class="style-one">
+                            {% end %}
+                        {% end %}
+                    </ul>
+                {% end %}
+
+                <!-- Add comment -->
+                {% if task.commentable %}
+                    <!-- <hr class="style-one"> -->
+                    <div class="input-placeholder">Add a comment...</div>
+                    <div class="panel-google-plus-comment">
+                        <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
+                        <div class="panel-google-plus-textarea">
+                            <textarea rows="4"
+                                class="form-control"
+                                name="comment"
+                                id="{{ task.id }}-comment"
+                                placeholder="Add a comment..."></textarea>
+                            <button
+                                type="submit"
+                                class="[ btn btn-success disabled ]"
+                                data-url="/task/{{ task.id }}/comment"
+                                data-cache="false"
+                                data-async="true"
+                                data-key="comment"
+                                data-source="{{ task.id }}-comment"
+                                data-target="{{ task.id }}"
+                            >Post comment</button>
+                            <button type="reset" class="[ btn btn-default ]">Cancel</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                {% end %}
+
+            </div> <!-- <div class="well comment-block"> -->
         {% end %}
     </div>
-    {% if task.commentable %}
-        <div class="panel-google-plus-comment">
-            <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
-            <div class="panel-google-plus-textarea">
-                <textarea rows="4"
-                    class="form-control"
-                    name="comment"
-                    id="{{ task.id }}-comment"
-                    placeholder="Add a comment..."
-                    data-url="/task/{{ task.id }}/comment"
-                    data-cache="false"
-                    data-async="true"
-                    data-key="comment"
-                    data-target="{{ task.id }}"></textarea>
-                <button
-                    type="submit"
-                    class="[ btn btn-success disabled ]"
-                    data-url="/task/{{ task.id }}/comment"
-                    data-cache="false"
-                    data-async="true"
-                    data-key="comment"
-                    data-source="{{ task.id }}-comment"
-                    data-target="{{ task.id }}"
-                >Post comment</button>
-                <button type="reset" class="[ btn btn-default ]">Cancel</button>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <!-- <div class="input-group input-group-sm">
-            <span class="input-group-addon">Comment</span>
-            <input type="text"
-                   class="form-control"
-                   name="comment"
-                   placeholder="add simple, one line comment"
-                   data-url="/task/{{ task.id }}/comment"
-                   data-cache="false"
-                   data-async="true"
-                   data-key="comment"
-                   data-target="{{ task.id }}">
-        </div> -->
-    {% end %}
 </div>

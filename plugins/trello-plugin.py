@@ -118,7 +118,39 @@ class Trello(PluginProvider):
 
                 self.log.debug("Loading comments for %s..." % str(card))
                 most_recent = True # I think the first comment is always most recent
+                # Comment JSON example
+                # {
+                #     u'type': u'commentCard',
+                #     u'idMemberCreator': u'',
+                #     u'memberCreator': {
+                #         u'username': u'',
+                #         u'fullName': u'',
+                #         u'initials': u'',
+                #         u'id': u'',
+                #         u'avatarHash': None
+                #     },
+                #     u'date': u'2014-09-19T18:55:59.139Z',
+                #     u'data': {
+                #         u'text': u'',
+                #         u'list': {
+                #             u'name': u'',
+                #             u'id': u''
+                #         },
+                #         u'board': {
+                #             u'id': u'',
+                #             u'name': u'',
+                #             u'shortLink': u''
+                #         },
+                #         u'card': {
+                #             u'idShort': int,
+                #             u'id': u'',
+                #             u'name': u'',
+                #             u'shortLink': u''
+                #         }
+                #     }, u'id': u''
+                # }
                 for c in card.comments:
+                    self.log.debug("Comment JSON is %s" % str(c))
                     comments += [comment.Comment(
                         name = c['data']['text'],
                         plugin = self,
@@ -127,7 +159,8 @@ class Trello(PluginProvider):
                             c['date'][:-5],
                             '%Y-%m-%dT%H:%M:%S',
                         ),
-                        most_recent = most_recent
+                        commentor = c['memberCreator']['fullName'],
+                        most_recent = most_recent,
                     )]
                     most_recent = False
             self.log.debug("Comments loaded as %s" % str(comments))

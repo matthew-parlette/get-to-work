@@ -97,8 +97,9 @@ $(function () {
     });
 
     // http://bootsnipp.com/snippets/featured/google-plus-styled-post
-    $('.panel-google-plus > .panel-footer > .input-placeholder, .panel-google-plus > .panel-google-plus-comment > .panel-google-plus-textarea > button[type="reset"]').on('click', function(event) {
+    $('.panel-google-plus > .panel-footer > .comment-block > .input-placeholder, .panel-google-plus-comment > .panel-google-plus-textarea > button[type="reset"]').on('click', function(event) {
         var $panel = $(this).closest('.panel-google-plus');
+        var $panelfooter = $panel.find('.panel-footer');
         $comment = $panel.find('.panel-google-plus-comment');
 
         $comment.find('.btn:first-child').addClass('disabled');
