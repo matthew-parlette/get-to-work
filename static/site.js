@@ -65,6 +65,37 @@ $(function () {
         }
     });
 
+    // Send comments via AJAX when submit is pressed
+    $('button[data-async="true"]').click(function(e){
+        e.preventDefault();
+        var self = $(this),
+        url = self.data('url'),
+        target = self.data('target'),
+        cache = self.data('cache'),
+        key = self.data('key'),
+        source = self.data('source');
+
+        if (source !== 'undefined'){
+            payload = $('#' + source).val();
+        }
+        else {
+            payload = ''
+        }
+
+        $.ajax({
+            url: url,
+            cache : cache,
+            data: '{"' + key + '": "' + payload + '"}',
+            type: 'POST',
+            success: function(data){
+                if (target !== 'undefined'){
+                    // alert(data);
+                    $('#'+target).replaceWith( data );
+                }
+            }
+        });
+    });
+
     // http://bootsnipp.com/snippets/featured/google-plus-styled-post
     $('.panel-google-plus > .panel-footer > .input-placeholder, .panel-google-plus > .panel-google-plus-comment > .panel-google-plus-textarea > button[type="reset"]').on('click', function(event) {
         var $panel = $(this).closest('.panel-google-plus');

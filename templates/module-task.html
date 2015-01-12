@@ -77,8 +77,26 @@
         <div class="panel-google-plus-comment">
             <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
             <div class="panel-google-plus-textarea">
-                <textarea rows="4"></textarea>
-                <button type="submit" class="[ btn btn-success disabled ]">Post comment</button>
+                <textarea rows="4"
+                    class="form-control"
+                    name="comment"
+                    id="{{ task.id }}-comment"
+                    placeholder="Add a comment..."
+                    data-url="/task/{{ task.id }}/comment"
+                    data-cache="false"
+                    data-async="true"
+                    data-key="comment"
+                    data-target="{{ task.id }}"></textarea>
+                <button
+                    type="submit"
+                    class="[ btn btn-success disabled ]"
+                    data-url="/task/{{ task.id }}/comment"
+                    data-cache="false"
+                    data-async="true"
+                    data-key="comment"
+                    data-source="{{ task.id }}-comment"
+                    data-target="{{ task.id }}"
+                >Post comment</button>
                 <button type="reset" class="[ btn btn-default ]">Cancel</button>
             </div>
             <div class="clearfix"></div>
