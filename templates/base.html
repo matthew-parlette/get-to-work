@@ -74,7 +74,7 @@
                         <li><a href="#"><span class="fa fa-user"></span> Profile</a></li>
 
                         <!-- Tasks -->
-                        <li>
+                        <li {% if str(handler.__class__.__name__) == 'TaskHandler' %}class="active"{% end %}>
                             <a href="/task"><span class="fa fa-edit"></span> Tasks
                             <span class="pull-right label label-default">{% if tasks %}{{ len([t for t in tasks if t.status == "working"]) }}{% else %}-{% end %}</span></a>
                         </li>
