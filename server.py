@@ -7,10 +7,13 @@ import yaml
 import json
 import tornado.web
 import tornado.ioloop
+import tornado.auth
 from plugin import PluginMount, PluginProvider
 from entities import *
 import ui_modules
 import timeit
+import base64
+import uuid
 
 global log
 global config
@@ -96,7 +99,40 @@ def find_task(tid):
     log.warning("Task not found: %s" % str(tid))
     return None
 
-class MainHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
+    def get_current_user(self):
+        self.user = self.get_secure_cookie("user")
+        if not self.user:
+            return None # @torando.web.authenticated will redirect to login_url
+        log.info("User loaded as %s" % str(self.user))
+
+class AuthHandler(BaseHandler, tornado.auth.GoogleOAuth2Mixin):
+    @tornado.gen.coroutine
+    def get(self):
+        if self.get_argument("code", False):
+            user = yield self.get_authenticated_user(
+                redirect_uri='http://localhost:8010/login',
+                code=self.get_argument('code'),
+            )
+            self.set_secure_cookie("user", tornado.escape.json_encode(user))
+        yield self.authorize_redirect(
+            redirect_uri='http://localhost:8010/login',
+            client_id=self.settings['google_oauth']['key'],
+            scope=[
+                'email',
+            ],
+            response_type='code',
+            extra_params={'approval_prompt': 'auto'},
+        )
+
+    def _on_auth(self, user):
+        if not user:
+            self.send_error(500)
+        self.set_secure_cookie("user", tornado.escape.json_encode(user))
+        self.redirect("/")
+
+class MainHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         projects = get_projects()
         self.render(
@@ -107,7 +143,7 @@ class MainHandler(tornado.web.RequestHandler):
             tasks = cache['tasks']['items'],
         )
 
-class ProjectHandler(tornado.web.RequestHandler):
+class ProjectHandler(BaseHandler):
     def get(self, pid):
         projects = get_projects()
         menu_state['projects'] = True
@@ -120,7 +156,7 @@ class ProjectHandler(tornado.web.RequestHandler):
             pid = pid,
         )
 
-class TaskHandler(tornado.web.RequestHandler):
+class TaskHandler(BaseHandler):
     def get(self, tid = None, action = None):
         log.info("Received %s as GET" % (str(self.request)))
         if tid:
@@ -182,10 +218,17 @@ settings = {
         'Comment': ui_modules.Comment,
     },
     "debug": True, # Automatically restarts when any code is changed
+    "cookie_secret": "3ZjlSoiJ74RNSN4q1MBADQz8OGdcOTiF",
+    "login_url": "/login",
+    "google_oauth": {
+        "key": "120093985192-8ut99ctto053ejn4eqapllaku47h0iuq.apps.googleusercontent.com",
+        "secret": "G4kb5KktCBMJ8bKAO28gzXm3",
+    },
 }
 
 application = tornado.web.Application([
     (r"/", MainHandler),
+    (r"/login", AuthHandler),
     (r"/project/(.*)", ProjectHandler),
     (r"/task/(.*)/(comment|close)", TaskHandler),
     (r"/task/(.*)$", TaskHandler),
@@ -225,6 +268,7 @@ if __name__ == "__main__":
     # Load Config
     global config
     defaults = {
+        # "cookie_secret": base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes),
         "trello": {
             "key": "",
             "secret": "",
