@@ -5,6 +5,7 @@ class Comment(object):
         plugin = None,
         url = None,
         timestamp = None,
+        commentor = None,
         most_recent = False,
     ):
         super(Comment, self).__init__()
@@ -15,6 +16,7 @@ class Comment(object):
         self.plugin = plugin           # Where is this comment from? (ex: Trello)
         self.url = url                 # Link to the item (if present)
         self.timestamp = timestamp     # Timestamp when the comment was made
+        self.commentor = commentor     # Name of commentor
         self.most_recent = most_recent # Is this the most recent comment for its task?
 
     def __repr__(self):

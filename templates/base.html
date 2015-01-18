@@ -5,10 +5,6 @@
     <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 
-    <!-- Site's CSS & JavaScript -->
-    <link rel="stylesheet" type="text/css" href="{{ static_url('site.css') }}">
-    <script src="{{ static_url('site.js') }}"></script>
-
     <!-- Latest compiled and minified Bootstrap CSS & JavaScript -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
@@ -18,6 +14,10 @@
 
     <!-- Font Awesome -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Site's CSS & JavaScript -->
+    <link rel="stylesheet" type="text/css" href="{{ static_url('site.css') }}">
+    <script src="{{ static_url('site.js') }}"></script>
 </head>
 <body>
     <div class="row">
@@ -74,9 +74,9 @@
                         <li><a href="#"><span class="fa fa-user"></span> Profile</a></li>
 
                         <!-- Tasks -->
-                        <li>
+                        <li {% if str(handler.__class__.__name__) == 'TaskHandler' %}class="active"{% end %}>
                             <a href="/task"><span class="fa fa-edit"></span> Tasks
-                            <span class="pull-right label label-default">{% if tasks %}{{ len(tasks) }}{% else %}-{% end %}</span></a>
+                            <span class="pull-right label label-default">{% if tasks %}{{ len([t for t in tasks if t.status == "working"]) }}{% else %}-{% end %}</span></a>
                         </li>
 
                         <!-- Projects -->

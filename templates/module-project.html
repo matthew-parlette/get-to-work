@@ -25,9 +25,13 @@
     </div>
 {% end %}
 {% if show_tasks %}
-    {% for task in project.tasks %}
-        {% if show_tasks == task.status %}
-            {% module Task(task) %}
+    <div class="row">
+        {% for task in project.tasks %}
+            {% if show_tasks == task.status %}
+                <div class="[ col-xs-12 col-sm-6 ]">
+                    {% module Task(task) %}
+                </div>
+            {% end %}
         {% end %}
-    {% end %}
+    </div>
 {% end %}

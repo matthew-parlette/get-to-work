@@ -31,7 +31,7 @@ border-right: 1px solid #e7e7e7;
 
 .side-menu {
     position: fixed;
-    width: 300px;
+    width: 250px;
     height: 100%;
     background-color: #f8f8f8;
     border-right: 1px solid #e7e7e7;
@@ -157,7 +157,7 @@ border-right: 1px solid #e7e7e7;
 }
 /* Main body section */
 .side-body {
-    margin-left: 310px;
+    margin-left: 260px;
     margin-right: 20px;
     margin-top: 1em;
 }
@@ -357,4 +357,296 @@ border-right: 1px solid #e7e7e7;
 .jumbotron .statistics p{
     /*font-size: 1em;*/
     padding-left: 2em;
+}
+
+/* http://bootsnipp.com/snippets/featured/google-plus-styled-post */
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+
+/*body {
+    background-color: rgb(229, 229, 229);
+    padding-top: 60px;
+    padding-bottom: 30px;
+}*/
+
+.panel-google-plus {
+    position: relative;
+    border-radius: 0px;
+    border: 1px solid rgb(216, 216, 216);
+    font-family: 'Roboto', sans-serif;
+}
+.panel-google-plus > .dropdown {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+}
+.panel-google-plus > .dropdown > span > span {
+    font-size: 10px;
+}
+.panel-google-plus > .dropdown > .dropdown-menu {
+    left: initial;
+    right: 0px;
+    border-radius: 2px;
+}
+.panel-google-plus > .panel-google-plus-tags {
+    position: absolute;
+    top: 65px;
+    right: -3px;
+}
+.panel-google-plus > .panel-google-plus-tags > ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.panel-google-plus > .panel-google-plus-tags > ul:hover {
+    box-shadow: 0px 0px 3px rgb(0, 0, 0);
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.25);
+}
+.panel-google-plus > .panel-google-plus-tags > ul > li {
+    display: block;
+    right: 0px;
+    width: 0px;
+    padding: 5px 0px 5px 0px;
+    background-color: rgb(245, 245, 245);
+    font-size: 12px;
+    overflow: hidden;
+}
+.panel-google-plus > .panel-google-plus-tags > ul > li::after {
+    content:"";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    border-right: 3px solid rgb(66, 127, 237);
+}
+.panel-google-plus > .panel-google-plus-tags > ul:hover > li,
+.panel-google-plus > .panel-google-plus-tags > ul > li:first-child {
+    padding: 5px 15px 5px 10px;
+    width: auto;
+    cursor: pointer;
+    margin-left: auto;
+}
+.panel-google-plus > .panel-google-plus-tags > ul:hover > li {
+    background-color: rgb(255, 255, 255);
+}
+.panel-google-plus > .panel-google-plus-tags > ul > li:hover {
+    background-color: rgb(66, 127, 237);
+    color: rgb(255, 255, 255);
+}
+.panel-google-plus > .panel-heading {
+    background-color: rgb(255, 255, 255);
+    border-width: 0px;
+}
+
+.panel-google-plus > .panel-footer {
+    background-color: rgb(255, 255, 255);
+    border-width: 0px;
+}
+.panel-google-plus > .panel-heading {
+    margin-top: 20px;
+    padding-bottom: 5px;
+}
+/*.panel-google-plus > .panel-heading > i {
+    margin-right: 15px;
+}*/
+.panel-google-plus > .panel-heading > h3 {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: 700;
+}
+.panel-google-plus > .panel-heading > h5 {
+    color: rgb(153, 153, 153);
+    font-size: 12px;
+    font-weight: 400;
+}
+.panel-google-plus > .panel-body {
+    padding-top: 5px;
+    font-size: 13px;
+}
+.panel-google-plus > .panel-body > .panel-google-plus-image {
+    display: block;
+    text-align: center;
+    background-color: rgb(245, 245, 245);
+    border: 1px solid rgb(217, 217, 217);
+}
+.panel-google-plus > .panel-body > .panel-google-plus-image > img {
+    max-width: 100%;
+}
+
+.panel-google-plus > .panel-footer {
+    /*font-size: 14px;*/
+    /*font-weight: 700;*/
+    min-height: 54px;
+}
+.panel-google-plus > .panel-footer > .btn {
+    float: left;
+    margin-right: 8px;
+}
+.panel-google-plus > .panel-footer > .buttons {
+    color: rgb(153, 153, 153);
+    font-size: 12px;
+    font-weight: 400;
+    /*padding: 8px 6px 7px;*/
+    /*border: 1px solid rgb(217, 217, 217);*/
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.0470588) 0px 1px 0px 0px;
+}
+
+.panel-google-plus-comment {
+    display: none;
+    padding: 10px 20px 15px;
+    border-top: 1px solid rgb(229, 229, 229);
+    background-color: rgb(245, 245, 245);
+}
+.panel-google-plus-show-comment > .panel-footer > .comment-block > .panel-google-plus-comment {
+    display: block;
+}
+/*.panel-google-plus-comment > img {
+float: left;
+}*/
+.panel-google-plus-comment > .panel-google-plus-textarea {
+    float: right;
+    width: calc(100% - 56px);
+}
+.panel-google-plus-comment > .panel-google-plus-textarea > textarea {
+    display: block;
+    /*margin-left: 60px;
+    width: calc(100% - 56px);*/
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(217, 217, 217);
+    box-shadow: rgba(0, 0, 0, 0.0470588) 0px 1px 0px 0px;
+    resize: vertical;
+}
+.panel-google-plus-comment > .panel-google-plus-textarea > .btn {
+    margin-top: 10px;
+    margin-right: 8px;
+    width: 100%;
+}
+@media (min-width: 992px) {
+    .panel-google-plus-comment > .panel-google-plus-textarea > .btn {
+        width: auto;
+    }
+}
+
+
+.panel-google-plus .btn {
+    border-radius: 3px;
+}
+.panel-google-plus .btn-default {
+    border: 1px solid rgb(217, 217, 217);
+    box-shadow: rgba(0, 0, 0, 0.0470588) 0px 1px 0px 0px;
+}
+.panel-google-plus .btn-default:hover,
+.panel-google-plus .btn-default:focus,
+.panel-google-plus .btn-default:active {
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(0, 0, 0);
+}
+
+.panel-google-plus > .panel-heading > .circle {
+    border-radius: 50%;
+    margin: 0.15em;
+    font-size: 3em;
+}
+
+.panel-google-plus > .panel-heading > .fa-trello{
+    background: #4099FF;
+    color: #fff;
+    padding: 0.1em 0.14em;
+}
+
+.panel-google-plus > .panel-heading > .fa-ticket{
+    background: #000;
+    color: #fff;
+}
+
+/* Font Awesome colors */
+/* copied from http://codepen.io/jcasabona/pen/CDvAt */
+.fa-twitter{
+    background: #4099FF;
+    color: #FFFFFF;
+    padding: 0.05em 0.07em;
+}
+.fa-google-plus{
+    color: #FFFFFF;
+    background: #dd4b39;
+    padding: 0.1em 0.1em;
+}
+
+.fa-pinterest{
+    color: #cb2027;
+}
+
+.fa-facebook{
+    background: #3B5998;
+    color: #FFFFFF;
+    padding: 0.05em 0.3em;
+}
+.fa-youtube{
+    background: #bb0000;
+    color: #FFFFFF;
+    padding: 0.1em 0.14em;
+
+}
+
+/*Comment formatting*/
+li.ui-state-default{
+    background:#fff0;
+    border:none;
+    border-bottom:1px solid #ddd;
+    text-align: left;
+    padding-bottom: 10px;
+}
+
+li.ui-state-default:last-child{
+    border-bottom:none;
+}
+
+.well {
+    border-radius:1px;
+    box-shadow:0 0 0;
+    border-color:#d2d2d2;
+    /*box-shadow:0 1px 0 #cfcfcf;*/
+    /*border-radius:3px;*/
+}
+.panel-google-plus > .panel-footer > .comment-block > .input-placeholder {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 8px 6px 7px;
+    color: rgb(153, 153, 153);
+    background: #fff;
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.0470588) 0px 1px 0px 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.panel-google-plus-show-comment > .panel-footer > .comment-block > .input-placeholder {
+    display: none;
+}
+.panel-google-plus .panel-footer {
+    padding-bottom: 0px;
+}
+
+.panel-google-plus .panel-footer .comment-block{
+    margin-left: -16px;
+    margin-right: -16px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-size: .9em;
+}
+
+.list-group-item:first-child,.list-group-item:last-child {
+    border-radius:0;
+}
+
+hr.style-one {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: -webkit-linear-gradient(left, #ccc, #333, #ccc);
+    background-image:    -moz-linear-gradient(left, #ccc, #333, #ccc);
+    background-image:     -ms-linear-gradient(left, #ccc, #333, #ccc);
+    background-image:      -o-linear-gradient(left, #ccc, #333, #ccc);
 }

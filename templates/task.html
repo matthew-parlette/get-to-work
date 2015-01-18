@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for task in tasks %}
-        {% module Task(task) %}
-    {% end %}
+    <div class="row">
+        {% for num, task in enumerate([task for task in tasks if task.status == "working"]) %}
+            <div class="[ col-xs-12 col-sm-6 ]">
+                {% module Task(task) %}
+            </div>
+        {% end %}
+    </div>
 {% end %}

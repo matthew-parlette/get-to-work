@@ -8,54 +8,98 @@
         {% set panel_color = 'danger' %}
     {% end %}
 {% end %}
-<div id="{{ task.id }}" class="panel panel-{{ panel_color }}">
-    <div class="panel-heading">
-        <a href="{{ task.url }}" target="_blank">
-            {{ task.name }}
-        </a>
-        {% if task.closeable %}
-            <a href="#"
-                id="close-{{ task.id }}"
-                data-url="/task/{{ task.id }}/close"
-                data-target="{{ task.id }}"
-                data-cache="false"
-                data-async="true"
-                class="btn btn-xs btn-{% if task.status != 'complete'%}default{% else %}success{% end %} pull-right">
-                <span class="glyphicon glyphicon-ok"></span> Done
-            </a>
-        {% end %}
-    </div>
-    <div class="panel-body">
-        {% if task.comments %}
-            Comments:
-            <ul class="list-group">
-            {% for comment in task.comments %}
-                <li class="list-group-item">
-                    {% if comment.most_recent %}
-                        <div class="pull-right"><span class="badge">Most Recent</span></div>
-                    {% end %}
-                    {{ comment.name }}
+<div id="{{ task.id }}" class="panel panel-google-plus">
+    <div class="dropdown">
+        <span class="dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="[ glyphicon glyphicon-chevron-down ]"></span>
+        </span>
+        <ul class="dropdown-menu" role="menu">
+            <!-- <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li> -->
+            {% if task.closeable %}
+                <li role="presentation">
+                    <a href="#"
+                       role="menuitem"
+                       id="close-{{ task.id }}"
+                       data-url="/task/{{ task.id }}/close"
+                       data-target="{{ task.id }}"
+                       data-cache="false"
+                       data-async="true">
+                        <span class="glyphicon glyphicon-ok"></span> Mark Complete
+                    </a>
                 </li>
             {% end %}
-            </ul>
-        {% else %}
-            Comments: None
-        {% end %}
+            <!--<li role="presentation" class="divider"></li>-->
+        </ul>
+    </div>
+    <div class="panel-google-plus-tags">
+        <ul>
+            <li>{{ task.plugin.name }}</li>
+        </ul>
+    </div>
+    <div class="panel-heading">
+        <!-- <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" /> -->
+        <i class="fa fa-{{ task.plugin.icon }} circle pull-left"></i>
+        <h3><a href="{{ task.url }}" target="_blank">{{ task.name }}</a></h3>
+        <h5>{% if task.requestor %}{{ task.requestor }}{% end %}</h5>
+    </div>
+    <div class="panel-body">
+
     </div>
     <div class="panel-footer">
         {% if task.commentable %}
-            <div class="input-group input-group-sm">
-                <span class="input-group-addon">Comment</span>
-                <input type="text"
-                       class="form-control"
-                       name="comment"
-                       placeholder="add simple, one line comment"
-                       data-url="/task/{{ task.id }}/comment"
-                       data-cache="false"
-                       data-async="true"
-                       data-key="comment"
-                       data-target="{{ task.id }}">
-            </div>
+        {% end %}
+
+        <div class="buttons">
+            <a href="{{ task.url }}" target="_blank" class="[ btn btn-default ] fa fa-link"></a>
+            <button type="button" class="[ btn btn-default ]">
+                <span class="[ glyphicon glyphicon-share-alt ]"></span>
+            </button>
+        </div>
+
+        <!-- Show existing comments -->
+        {% if task.comments or task.commentable %}
+            <div class="well comment-block">
+                {% if task.comments %}
+
+                    <ul class="list-unstyled">
+                        {% for num, comment in enumerate(task.comments) %}
+                            {% module Comment(comment = comment) %}
+                            {% if num < len(task.comments) - 1 %}
+                                <hr class="style-one">
+                            {% end %}
+                        {% end %}
+                    </ul>
+                {% end %}
+
+                <!-- Add comment -->
+                {% if task.commentable %}
+                    <!-- <hr class="style-one"> -->
+                    <div class="input-placeholder">Add a comment...</div>
+                    <div class="panel-google-plus-comment">
+                        <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
+                        <div class="panel-google-plus-textarea">
+                            <textarea rows="4"
+                                class="form-control"
+                                name="comment"
+                                id="{{ task.id }}-comment"
+                                placeholder="Add a comment..."></textarea>
+                            <button
+                                type="submit"
+                                class="[ btn btn-success disabled ]"
+                                data-url="/task/{{ task.id }}/comment"
+                                data-cache="false"
+                                data-async="true"
+                                data-key="comment"
+                                data-source="{{ task.id }}-comment"
+                                data-target="{{ task.id }}"
+                            >Post comment</button>
+                            <button type="reset" class="[ btn btn-default ]">Cancel</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                {% end %}
+
+            </div> <!-- <div class="well comment-block"> -->
         {% end %}
     </div>
 </div>
