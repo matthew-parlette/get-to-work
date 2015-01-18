@@ -120,7 +120,7 @@ class ProjectHandler(tornado.web.RequestHandler):
             pid = pid,
         )
 
-class TaskHandlerWithAction(tornado.web.RequestHandler):
+class TaskHandler(tornado.web.RequestHandler):
     def get(self, tid = None, action = None):
         log.info("Received %s as GET" % (str(self.request)))
         if tid:
@@ -187,9 +187,9 @@ settings = {
 application = tornado.web.Application([
     (r"/", MainHandler),
     (r"/project/(.*)", ProjectHandler),
-    (r"/task/(.*)/(comment|close)", TaskHandlerWithAction),
-    (r"/task/(.*)$", TaskHandlerWithAction),
-    (r"/task", TaskHandlerWithAction),
+    (r"/task/(.*)/(comment|close)", TaskHandler),
+    (r"/task/(.*)$", TaskHandler),
+    (r"/task", TaskHandler),
 ], **settings)
 
 if __name__ == "__main__":

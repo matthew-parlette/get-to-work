@@ -76,7 +76,7 @@
                         <!-- Tasks -->
                         <li>
                             <a href="/task"><span class="fa fa-edit"></span> Tasks
-                            <span class="pull-right label label-default">{% if tasks %}{{ len(tasks) }}{% else %}-{% end %}</span></a>
+                            <span class="pull-right label label-default">{% if tasks %}{{ len([t for t in tasks if t.status == "working"]) }}{% else %}-{% end %}</span></a>
                         </li>
 
                         <!-- Projects -->
