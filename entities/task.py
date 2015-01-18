@@ -6,6 +6,7 @@ class Task(object):
         plugin = None,
         plugin_obj = None,
         url = None,
+        requestor = None,
         status = None,
         priority = None,
         comments = [],
@@ -18,6 +19,7 @@ class Task(object):
         self.plugin = plugin           # The plugin that created this task
         self.plugin_obj = plugin_obj   # Reference to the object that created this task
         self.url = url                 # Link to the item
+        self.requestor = requestor     # Who is this task for? Generally this is a customer
         self.status = status           # Status of this task
         self.priority = priority       # Priority of this task (low, medium, high)
         self._comments = comments      # Comments for this task

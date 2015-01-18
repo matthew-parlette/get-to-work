@@ -74,6 +74,7 @@ class Trello(PluginProvider):
                     plugin = self,
                     plugin_obj = card,
                     url = card.url,
+                    requestor = board.name.partition(' ')[0],
                     status = status or None,
                     priority = priority,
                 )]
@@ -92,6 +93,7 @@ class Trello(PluginProvider):
     def tasks(self, project = None):
         result = []
         if project:
+            # Return tasks for a project
             pass
         else:
             # Return all tasks

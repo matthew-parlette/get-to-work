@@ -14,7 +14,7 @@
             <span class="[ glyphicon glyphicon-chevron-down ]"></span>
         </span>
         <ul class="dropdown-menu" role="menu">
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+            <!-- <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li> -->
             {% if task.closeable %}
                 <li role="presentation">
                     <a href="#"
@@ -40,7 +40,7 @@
         <!-- <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" /> -->
         <i class="fa fa-{{ task.plugin.icon }} circle pull-left"></i>
         <h3><a href="{{ task.url }}" target="_blank">{{ task.name }}</a></h3>
-        <h5></h5>
+        <h5>{% if task.requestor %}{{ task.requestor }}{% end %}</h5>
     </div>
     <div class="panel-body">
 

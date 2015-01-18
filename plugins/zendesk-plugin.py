@@ -71,6 +71,10 @@ class Zendesk(PluginProvider):
         tickets = self.api.execute_view(view_id = view_id)
         self.log.debug("Tickets list is %s" % str(tickets))
         if tickets and tickets['count'] > 0:
+            self.log.debug("Loading organizations...")
+            organizations = {}
+            for org in tickets['organizations']:
+                organizations[org['id']] = org['name']
             self.log.debug("Loading tickets as Tasks...")
             for ticket in tickets['rows']:
                 result += [task.Task(
@@ -79,6 +83,7 @@ class Zendesk(PluginProvider):
                     plugin = self,
                     plugin_obj = ticket,
                     url = ticket['ticket']['url'],
+                    requestor = organizations[ticket['organization_id']] if ticket['organization_id'] in organizations else None,
                     status = self.config['zendesk']['status'][ticket['status']],
                     priority = self.config['zendesk']['priority'][ticket['priority']],
                     comments = [],
