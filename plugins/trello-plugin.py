@@ -40,10 +40,46 @@ class Trello(PluginProvider):
             if board.closed:
                 self.log.debug("Board %s is closed, skipping..." % str(board))
                 continue
-            # Build task list
-            lists = board.open_lists()
-            tasks = []
-            for card in board.open_cards():
+            p = project.Project(
+                name = board.name,
+                pid = board.id,
+                plugin = self,
+                plugin_obj = board,
+                url = board.url,
+                tasks = [],
+            )
+            p.tasks = self.tasks(p)
+            result += [p]
+        self.log.debug("Boards loaded, returning %s" % str(result))
+        return result
+
+    def tasks(self, project = None):
+        result = []
+        cards = []
+        lists = []
+        if project:
+            # Return tasks for a project
+            self.log.debug("Loading tasks for project %s..." % str(project))
+            if project.plugin_obj:
+                board = project.plugin_obj
+                self.log.info("Board loaded as %s" % str(board))
+                lists = board.open_lists()
+                cards = board.open_cards()
+        else:
+            # Return all tasks
+            self.log.debug("Loading all tasks for open boards...")
+            for board in self.api.list_boards():
+                self.log.debug("Processing board %s..." % str(board))
+                if board.closed:
+                    self.log.debug("Board %s is closed, skipping..." % str(board))
+                    continue
+                # Build task list
+                lists += board.open_lists()
+                cards += board.open_cards()
+
+        # Cards should be set. If not, there is nothing to load
+        if cards and lists:
+            for card in cards:
                 self.log.debug("Card %s has badges %s" % (str(card.name),str(card.badges)))
                 for board_list in lists:
                     if board_list.id == card.list_id:
@@ -68,7 +104,7 @@ class Trello(PluginProvider):
                             priority = self.config['trello']['priority'][label['name']]
                             break
 
-                tasks += [task.Task(
+                result += [task.Task(
                     name = card.name,
                     id = card.id,
                     plugin = self,
@@ -79,70 +115,8 @@ class Trello(PluginProvider):
                     priority = priority,
                 )]
                 self.log.debug("Task created for card '%s'" % str(card.name))
-            self.log.debug("Task list is %s" % str(tasks))
-            result += [project.Project(
-                name = board.name,
-                pid = board.id,
-                plugin = self,
-                url = board.url,
-                tasks = tasks
-            )]
-        self.log.debug("Boards loaded, returning %s" % str(result))
-        return result
-
-    def tasks(self, project = None):
-        result = []
-        if project:
-            # Return tasks for a project
-            pass
-        else:
-            # Return all tasks
-            self.log.debug("Loading all tasks for open boards...")
-            for board in self.api.list_boards():
-                self.log.debug("Processing board %s..." % str(board))
-                if board.closed:
-                    self.log.debug("Board %s is closed, skipping..." % str(board))
-                    continue
-                # Build task list
-                lists = board.open_lists()
-                for card in board.open_cards():
-                    self.log.debug("Card %s has badges %s" % (str(card.name),str(card.badges)))
-                    for board_list in lists:
-                        if board_list.id == card.list_id:
-                            if board_list.name in self.config['trello']['status']:
-                                status = self.config['trello']['status'][board_list.name]
-                                self.log.debug("Status for '%s' read as %s" % (str(card.name),str(status)))
-                            else:
-                                self.log.error(
-                                    "Status for '%s' could not be determined, list name of %s not found in config" % (
-                                        str(card.name),
-                                        str(board_list.name),
-                                    ))
-                            break
-
-                    # Determine priority
-                    priority = None
-                    if card.labels:
-                        for label in card.labels:
-                            if label['name'] in self.config['trello']['priority']:
-                                # Return the first label we find that matches a priority
-                                #  from the config.
-                                priority = self.config['trello']['priority'][label['name']]
-                                break
-
-                    result += [task.Task(
-                        name = card.name,
-                        id = card.id,
-                        plugin = self,
-                        plugin_obj = card,
-                        url = card.url,
-                        requestor = board.name.partition(' ')[0],
-                        status = status or None,
-                        priority = priority,
-                    )]
-                    self.log.debug("Task created for card '%s'" % str(card.name))
-                self.log.debug("Task list is %s" % str(result))
-            self.log.debug("Tasks loaded, returning %s" % str(result))
+            self.log.debug("Task list is %s" % str(result))
+        self.log.debug("Tasks loaded, returning %s" % str(result))
         return result
 
     def comments(self, task = None):
