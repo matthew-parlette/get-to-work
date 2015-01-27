@@ -107,6 +107,18 @@ class MainHandler(tornado.web.RequestHandler):
             tasks = cache['tasks']['items'],
         )
 
+class ReportHandler(tornado.web.RequestHandler):
+    def get(self):
+        # projects = get_projects()
+        # menu_state['reports'] = True
+        self.render(
+            "templates/report.html",
+            config = config,
+            menu_state = menu_state,
+            projects = cache['projects']['items'],
+            tasks = cache['tasks']['items'],
+        )
+
 class ProjectHandler(tornado.web.RequestHandler):
     def get(self, pid):
         projects = get_projects()
@@ -186,6 +198,7 @@ settings = {
 
 application = tornado.web.Application([
     (r"/", MainHandler),
+    (r"/report", ReportHandler),
     (r"/project/(.*)", ProjectHandler),
     (r"/task/(.*)/(comment|close)", TaskHandler),
     (r"/task/(.*)$", TaskHandler),

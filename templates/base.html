@@ -73,11 +73,19 @@
                         <li><a href="/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
                         <li><a href="#"><span class="fa fa-user"></span> Profile</a></li>
 
+                        <!-- Reports -->
+                        <li {% if str(handler.__class__.__name__) == 'ReportHandler' %}class="active"{% end %}>
+                            <a href="/report"><span class="fa fa-file-text-o"></span> Reports
+                            </a>
+                        </li>
+                        <!-- Reports -->
+
                         <!-- Tasks -->
                         <li {% if str(handler.__class__.__name__) == 'TaskHandler' %}class="active"{% end %}>
                             <a href="/task"><span class="fa fa-edit"></span> Tasks
                             <span class="pull-right label label-default">{% if tasks %}{{ len([t for t in tasks if t.status == "working"]) }}{% else %}-{% end %}</span></a>
                         </li>
+                        <!-- Tasks -->
 
                         <!-- Projects -->
                         <li class="panel panel-default" id="dropdown">
@@ -108,6 +116,8 @@
                                 </div>
                             </div>
                         </li>
+                        <!-- Projects -->
+
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </nav>
